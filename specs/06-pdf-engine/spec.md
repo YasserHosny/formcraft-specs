@@ -95,6 +95,24 @@ Each element type renders appropriately in the PDF:
 
 ---
 
+### User Story 6 - Render PDF with Filled Data (Priority: P2)
+
+A user can export a PDF with pre-filled data values. The system accepts a data dictionary mapping element keys to values and renders each element with its filled value instead of its label. This supports both fill-mode workflows and data-driven form generation.
+
+**Why this priority**: Fill mode and data export are essential for operators filling out forms and for automated form generation workflows.
+
+**Independent Test**: Can be tested by providing filled data for a template and verifying the PDF renders with actual values instead of labels.
+
+**Acceptance Scenarios**:
+
+1. **Given** a template with element key "payee_name", **When** PDF is rendered with data `{"payee_name": "محمد أحمد"}`, **Then** the PDF shows "محمد أحمد" instead of the element label.
+2. **Given** a date element with key "issue_date", **When** PDF is rendered with data `{"issue_date": "25/09/2012"}`, **Then** the PDF shows the formatted date.
+3. **Given** a currency element with key "amount", **When** PDF is rendered with data `{"amount": "12345.678"}`, **Then** the PDF shows "12,345.68 EGP" with correct formatting.
+4. **Given** elements without provided data, **When** PDF is rendered, **Then** those elements show their labels or remain empty (configurable).
+5. **Given** a checkbox element with key "agreed", **When** PDF is rendered with data `{"agreed": true}`, **Then** the checkbox shows as checked (X or ✓ inside).
+
+---
+
 ### Edge Cases
 
 - What happens when an Arabic font is missing from the server? → Build fails at startup; font availability is checked at boot time.
@@ -126,6 +144,13 @@ Each element type renders appropriately in the PDF:
 - **FR-017**: Minimum font size for PDF text is 6pt.
 - **FR-018**: Currency formatting MUST respect the element's currencyCode and decimalPlaces settings.
 - **FR-019**: Date formatting MUST respect the element's dateFormat setting.
+- **FR-020**: System MUST accept optional `data` parameter in PDF render endpoint mapping element keys to filled values.
+- **FR-021**: When `data` is provided, system MUST render filled values instead of element labels.
+- **FR-022**: Elements without filled data MUST render as empty or show labels (configurable via `empty_mode` parameter).
+- **FR-023**: Filled data MUST be validated against element types and constraints before rendering.
+- **FR-024**: Checkbox elements with boolean filled data MUST render as checked (✓) or unchecked (empty square).
+- **FR-025**: Date elements with string filled data MUST apply the element's dateFormat before rendering.
+- **FR-026**: Currency elements with numeric filled data MUST apply currencyCode and decimalPlaces formatting.
 
 ### Key Entities
 

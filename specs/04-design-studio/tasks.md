@@ -111,3 +111,32 @@ T04-090-093 (undo/redo, after all element operations)
 - Palette components (T04-031, T04-032) in parallel
 - Property sub-panels (T04-051-054) all in parallel
 - Grid (Phase 7) and Layers (Phase 8) in parallel
+
+## Phase 12: Form Import & OCR Detection
+
+- [ ] **T04-110** P1 S8 — Set up Azure Document Intelligence in backend: install `azure-ai-formrecognizer`, configure credentials in .env
+- [ ] **T04-111** P1 S8 — Create `app/services/ocr/azure_ocr.py` — Azure OCR client with analyze_document() for layout extraction
+- [ ] **T04-112** P1 S8 — Create `app/services/ocr/field_classifier.py` — Classify detected regions into element types (date, currency, text, signature) based on text patterns and position
+- [ ] **T04-113** P1 S8 — Create `app/services/ocr/bounding_box_converter.py` — Convert image pixel coordinates to mm using page DPI
+- [ ] **T04-114** P1 S8 — Create `app/models/form_detection.py` — DetectedField model (bbox, text, confidence, suggested_type, status)
+- [ ] **T04-115** P1 S8 — Create migration for `form_detections` table (id, template_id, page_index, detected_fields JSONB, created_at)
+- [ ] **T04-116** P1 S8 — Create `app/api/routes/forms.py` — POST /api/forms/import (upload image, store as background, trigger OCR, return detection_id)
+- [ ] **T04-117** P1 S8 — Create endpoint GET /api/forms/{template_id}/detections — Return all detections for a template
+- [ ] **T04-118** P1 S8 — Create endpoint POST /api/forms/{template_id}/detections/accept — Accept detection(s), create elements via existing element API
+- [ ] **T04-119** P1 S8 — Write unit tests: azure_ocr.py (mock Azure API), field_classifier.py (pattern matching), bounding_box_converter.py (pixel↔mm accuracy)
+- [ ] **T04-120** P1 S8 — Write integration test: upload sample cheque → verify 90%+ field detection rate
+- [ ] **T04-121** P1 S8 — Create `src/app/features/designer/models/detected-field.model.ts` — TypeScript interface for DetectedField
+- [ ] **T04-122** P1 S8 — Create `import-form/import-form-dialog.component.ts` — File upload dialog with drag-drop, preview, page size selector
+- [ ] **T04-123** P1 S8 — Create `import-form/detection-review.component.ts` — Overlay component rendering colored bounding boxes on canvas
+- [ ] **T04-124** P1 S8 — Implement detection card UI — Show text, suggested type dropdown, confidence %, accept/reject buttons
+- [ ] **T04-125** P1 S8 — Implement "Accept All" / "Reject All" buttons — Bulk operations on all detections
+- [ ] **T04-126** P1 S8 — Bind detection overlay to canvas zoom/pan — Detections scale and move with canvas transformations
+- [ ] **T04-127** P1 S8 — Add keyboard shortcuts: A (accept selected), R (reject selected), arrow keys (navigate detections)
+- [ ] **T04-128** P2 S8 — Create `fill-mode/fill-mode.component.ts` — Fill mode layout (field entry form + live preview)
+- [ ] **T04-129** P2 S8 — Create `fill-mode/field-entry-form.component.ts` — Left panel with input fields per element, validation indicators
+- [ ] **T04-130** P2 S8 — Create `fill-mode/live-preview-canvas.component.ts` — Right panel showing canvas with filled values rendered
+- [ ] **T04-131** P2 S8 — Create migration for `form_submissions` table (id, template_id, filled_data JSONB, submitted_by, status, timestamps)
+- [ ] **T04-132** P2 S8 — Create endpoint POST /api/forms/submissions — Save draft or submit filled form
+- [ ] **T04-133** P2 S8 — Create endpoint GET /api/forms/submissions/{id} — Retrieve saved submission
+- [ ] **T04-134** P2 S8 — Implement two-way binding: field entry form ↔ canvas preview updates in real-time
+- [ ] **T04-135** P2 S8 — Implement validation in fill mode: highlight invalid fields, prevent export until valid

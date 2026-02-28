@@ -125,6 +125,26 @@ The canvas displays an optional grid overlay. Grid spacing is configurable (1mm,
 
 ---
 
+### User Story 8 - Form Import & Automatic Field Detection (Priority: P1)
+
+A Designer can upload a scanned form (cheque, government form, shipping label) as a page background. The system automatically detects fillable fields using OCR, suggests element types (date, amount, text, signature), and displays them as overlays. The Designer can review, accept, reject, or modify detections before converting them to FormCraft elements.
+
+**Why this priority**: Importing existing forms and auto-detecting fields dramatically reduces template creation time from hours to minutes.
+
+**Independent Test**: Can be tested by uploading a bank cheque image and verifying that date, amount, and name fields are correctly detected with 90%+ accuracy.
+
+**Acceptance Scenarios**:
+
+1. **Given** a cheque image is uploaded, **When** the system processes it, **Then** the image is set as the page background and OCR detection starts automatically.
+2. **Given** OCR completes on a cheque, **When** the Designer views the canvas, **Then** detected fields appear as colored bounding boxes with suggested types (date, currency, text).
+3. **Given** a detection overlay shows 12 detected fields, **When** the Designer clicks "Accept All", **Then** all 12 fields are converted to FormCraft elements at their detected positions.
+4. **Given** a detection is incorrect, **When** the Designer clicks "Reject", **Then** the detection is removed without creating an element.
+5. **Given** a detection has wrong type, **When** the Designer changes type from "text" to "date" and accepts, **Then** a date element is created instead.
+6. **Given** OCR misses a field, **When** the Designer drags an element from the palette, **Then** manual element creation works as normal.
+7. **Given** form dimensions are ambiguous, **When** the system detects the background image, **Then** it auto-detects page size from EXIF metadata or prompts the user to specify dimensions.
+
+---
+
 ### Edge Cases
 
 - What happens when the canvas viewport is smaller than the page? → Scroll bars appear; canvas is pannable.
@@ -159,6 +179,15 @@ The canvas displays an optional grid overlay. Grid spacing is configurable (1mm,
 - **FR-020**: System MUST prevent elements from being positioned outside page boundaries.
 - **FR-021**: System MUST support keyboard shortcuts: Delete (remove element), Ctrl+Z (undo), Ctrl+Y (redo), Ctrl+C/V (copy/paste), Ctrl+A (select all).
 - **FR-022**: System MUST render element type icons/labels on the canvas for visual identification.
+- **FR-023**: System MUST support uploading form images (JPEG, PNG) or PDFs as page backgrounds.
+- **FR-024**: System MUST detect fillable fields from uploaded forms using OCR (Azure Document Intelligence).
+- **FR-025**: OCR MUST extract bounding boxes, text content, and confidence scores for detected regions.
+- **FR-026**: System MUST classify detected fields into element types (date, currency, text, number, signature) with 85%+ accuracy.
+- **FR-027**: System MUST display detection overlays on canvas with color-coded bounding boxes per suggested type.
+- **FR-028**: System MUST allow Designers to accept, reject, or modify individual detections.
+- **FR-029**: System MUST support "Accept All" and "Reject All" bulk operations for detections.
+- **FR-030**: System MUST auto-detect page dimensions from image EXIF metadata or prompt for manual input.
+- **FR-031**: Detection results MUST persist until template is saved (not time-limited).
 
 ### Key Entities
 
