@@ -6,6 +6,23 @@ This document describes the Form Import & OCR Detection feature implementation a
 
 The feature enables automatic field detection from uploaded form images (cheques, government forms, shipping labels) using Azure Document Intelligence OCR, with manual review and element creation workflow.
 
+### Workflow Diagram
+
+[Cheque Upload + Auto-Detection Workflow (FigJam)](https://www.figma.com/online-whiteboard/create-diagram/91daa04e-99a8-4a98-9c9f-7c2af8db734e?utm_source=other&utm_content=edit_in_figjam&oai_id=&request_id=4af0e464-3392-4bff-b3b3-41d5fb0ed6ed)
+
+```mermaid
+flowchart LR
+    A["Designer uploads cheque image"] --> B["System stores image as page background"]
+    B --> C["OCR: Azure Document Intelligence"]
+    C --> D["Extract words + bounding boxes"]
+    D --> E["Field classifier suggests element types"]
+    E --> F["Detection overlays appear on canvas"]
+    F --> G["User reviews: accept/reject/edit type"]
+    G --> H["Accepted detections become FormCraft elements"]
+    H --> I["Save template"]
+    I --> J["Template ready for fill mode & PDF export"]
+```
+
 ## Implementation Status
 
 ### ✅ Completed
